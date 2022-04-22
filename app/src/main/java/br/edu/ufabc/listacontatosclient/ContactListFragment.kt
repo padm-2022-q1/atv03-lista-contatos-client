@@ -13,10 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import br.edu.ufabc.listacontatosclient.databinding.ContactListItemBinding
 import br.edu.ufabc.listacontatosclient.databinding.FragmentContactListBinding
 import br.edu.ufabc.listacontatosclient.model.Contact
+import com.google.android.material.snackbar.Snackbar
 
-
+/**
+ * A fragment that lists contacts.
+ */
 class ContactListFragment : Fragment() {
-    private lateinit var  binding: FragmentContactListBinding
+    private lateinit var binding: FragmentContactListBinding
     private val viewModel: MainViewModel by activityViewModels()
 
     /**
@@ -101,7 +104,10 @@ class ContactListFragment : Fragment() {
                         addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
                     }
                 }
-                is MainViewModel.Status.Error -> {}
+                is MainViewModel.Status.Error -> {
+                    Log.e("FRAGMENT", "Failed to load contact list", result.status.e)
+                    Snackbar.make(binding.root, "No data to display", Snackbar.LENGTH_LONG).show()
+                }
             }
             binding.swipeRefreshLayout.isRefreshing = false
         }

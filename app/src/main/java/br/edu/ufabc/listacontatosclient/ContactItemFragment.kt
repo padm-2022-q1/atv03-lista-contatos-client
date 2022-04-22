@@ -11,7 +11,9 @@ import androidx.navigation.fragment.navArgs
 import br.edu.ufabc.listacontatosclient.databinding.FragmentContactItemBinding
 import com.google.android.material.snackbar.Snackbar
 
-
+/**
+ * A fragment that displays the details of a contact.
+ */
 class ContactItemFragment : Fragment() {
     private lateinit var binding: FragmentContactItemBinding
     private val viewModel: MainViewModel by activityViewModels()
@@ -47,8 +49,10 @@ class ContactItemFragment : Fragment() {
                         }
                         is MainViewModel.Status.Error -> {
                             Log.e("VIEW", "Failed to create item detail view", result.status.e)
-                            Snackbar.make(view.rootView, "Failed to fetch item",
-                                Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(
+                                view.rootView, "Failed to fetch item",
+                                Snackbar.LENGTH_LONG
+                            ).show()
                         }
                     }
                     viewModel.isLoading.value = false
@@ -56,10 +60,11 @@ class ContactItemFragment : Fragment() {
             } ?: throw Exception("Could not obtain a valid contact id")
         } catch (e: Exception) {
             Log.e("VIEW", "Failed to create item detail view", e)
-            Snackbar.make(view.rootView, "No valid id was provided",
-                Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                view.rootView, "No valid id was provided",
+                Snackbar.LENGTH_LONG
+            ).show()
             binding.root.visibility = View.INVISIBLE
         }
-
     }
 }

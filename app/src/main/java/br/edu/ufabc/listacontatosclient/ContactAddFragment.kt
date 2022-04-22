@@ -11,6 +11,9 @@ import br.edu.ufabc.listacontatosclient.databinding.FragmentContactAddBinding
 import br.edu.ufabc.listacontatosclient.model.Contact
 import com.google.android.material.snackbar.Snackbar
 
+/**
+ * A fragment that render and process an insertion form.
+ */
 class ContactAddFragment : Fragment() {
     private lateinit var binding: FragmentContactAddBinding
     private val viewModel: MainViewModel by activityViewModels()
@@ -46,9 +49,12 @@ class ContactAddFragment : Fragment() {
             when (result.status) {
                 is MainViewModel.Status.Success -> {
                     ContactAddFragmentDirections.onAddSuccess(result.result ?: 0).let {
-                        findNavController().navigate(it, navOptions {
-                            popUpTo(R.id.destination_contact_list)
-                        })
+                        findNavController().navigate(
+                            it,
+                            navOptions {
+                                popUpTo(R.id.destination_contact_list)
+                            }
+                        )
                     }
                 }
                 is MainViewModel.Status.Error -> {
@@ -68,6 +74,4 @@ class ContactAddFragment : Fragment() {
         }
         return true
     }
-
-
 }

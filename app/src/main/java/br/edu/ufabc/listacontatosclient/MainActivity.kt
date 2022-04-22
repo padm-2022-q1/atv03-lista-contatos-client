@@ -5,10 +5,12 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import br.edu.ufabc.listacontatosclient.databinding.ActivityMainBinding
 
+/**
+ * The main activity.
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -31,8 +33,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getNavHost() = supportFragmentManager.findFragmentById(R.id.fragment_container)
-            as NavHostFragment
+    private fun getNavHost() =
+        supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
 
     private fun getNavController() = getNavHost().navController
 }

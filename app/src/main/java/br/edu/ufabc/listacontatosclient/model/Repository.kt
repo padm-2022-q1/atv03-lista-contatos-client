@@ -1,7 +1,5 @@
 package br.edu.ufabc.listacontatosclient.model
 
-import com.beust.klaxon.Klaxon
-import com.beust.klaxon.KlaxonException
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
@@ -13,17 +11,18 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import java.io.FileNotFoundException
-import java.io.InputStream
 
+/**
+ * The repository.
+ */
 class Repository {
     companion object {
         private const val url = "https://padm-2022q1-listacontatos.herokuapp.com/api"
-        private const val ra = "2123689"
+        private const val ra = ""
         private const val baseUrl = "$url/$ra/"
     }
 
-    private data class ServiceResult (
+    private data class ServiceResult(
         val items: List<Contact>?,
         val item: Contact?,
         val itemId: Long?,
@@ -49,9 +48,11 @@ class Repository {
         .build()
         .create(ContactService::class.java)
 
-    private fun deserializeErrorResult(response: Response<ServiceResult>)
-            = Gson().fromJson<ServiceResult>(response.errorBody()?.charStream()?.readText(),
-        object: TypeToken<ServiceResult>() {}.type)
+    private fun deserializeErrorResult(response: Response<ServiceResult>) =
+        Gson().fromJson<ServiceResult>(
+            response.errorBody()?.charStream()?.readText(),
+            object : TypeToken<ServiceResult>() {}.type
+        )
 
     private fun checkResponseCodes(response: Response<ServiceResult>) = when (response.code()) {
         200 -> {}
@@ -61,6 +62,10 @@ class Repository {
         else -> throw Exception("Invalid response code")
     }
 
+    /**
+     * Retrieves all contacts.
+     * @return a list of contacts
+     */
     suspend fun getAll(): List<Contact> = withContext(Dispatchers.IO) {
         service.list().let { response ->
             checkResponseCodes(response)
@@ -68,6 +73,11 @@ class Repository {
         }
     }
 
+    /**
+     * Gets a contact given its id.
+     * @param id the id
+     * @return a contact
+     */
     suspend fun getById(id: Long): Contact = withContext(Dispatchers.IO) {
         service.getById(id).let { response ->
             checkResponseCodes(response)
@@ -75,13 +85,14 @@ class Repository {
         }
     }
 
+    /**
+     * Add a contact.
+     * @param contact a contact
+     */
     suspend fun add(contact: Contact) = withContext(Dispatchers.IO) {
         service.add(contact).let { response ->
             checkResponseCodes(response)
             response.body()?.itemId ?: throw Exception("Failed to insert new item")
         }
     }
-
-    fun getAt(position: Int) {}
-
 }
